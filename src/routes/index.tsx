@@ -1,14 +1,13 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useEffect, useState, useRef, useCallback, useMemo } from 'react'
-import { Settings } from 'lucide-react'
+import { Settings, Sun, Moon } from 'lucide-react'
 import {
   SettingsDialog,
   ChatMessage,
   LoadingIndicator,
   ChatInput,
   Sidebar,
-  WelcomeScreen,
-  TopBanner
+  WelcomeScreen
 } from '../components'
 import { useConversations, useAppState, store, actions } from '../store'
 import { genAIResponse, type Message } from '../utils'
@@ -294,13 +293,40 @@ function Home() {
     setEditingTitle('')
   }, [updateConversationTitle]);
 
+  const [theme, setTheme] = useState<'light' | 'dark'>('dark')
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null
+    if (savedTheme) {
+      setTheme(savedTheme)
+    } else {
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+      setTheme(prefersDark ? 'dark' : 'light')
+    }
+  }, [])
+
+  const toggleTheme = useCallback(() => {
+    const newTheme = theme === 'dark' ? 'light' : 'dark'
+    setTheme(newTheme)
+    document.documentElement.classList.toggle('dark', newTheme === 'dark')
+    localStorage.setItem('theme', newTheme)
+  }, [theme])
+
   return (
-    <div className="relative flex h-screen bg-gray-900">
-      {/* Settings Button */}
-      <div className="absolute z-50 top-5 right-5">
+    <div className="relative flex h-screen" style={{ backgroundColor: 'var(--bg-primary)' }}>
+      {/* Theme & Settings Buttons */}
+      <div className="absolute z-50 flex gap-2 top-5 right-5">
+        <button
+          onClick={toggleTheme}
+          className="flex items-center justify-center w-10 h-10 transition-opacity rounded-full bg-gradient-to-r from-orange-500 to-red-600 hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-orange-500"
+          aria-label="Toggle theme"
+        >
+          {theme === 'dark' ? <Sun className="w-5 h-5 text-white" /> : <Moon className="w-5 h-5 text-white" />}
+        </button>
         <button
           onClick={() => setIsSettingsOpen(true)}
           className="flex items-center justify-center w-10 h-10 text-white transition-opacity rounded-full bg-gradient-to-r from-orange-500 to-red-600 hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-orange-500"
+          aria-label="Settings"
         >
           <Settings className="w-5 h-5" />
         </button>
@@ -322,7 +348,6 @@ function Home() {
 
       {/* Main Content */}
       <div className="flex flex-col flex-1">
-        <TopBanner />
         {error && (
           <p className="w-full max-w-3xl p-4 mx-auto font-bold text-orange-500">{error}</p>
         )}

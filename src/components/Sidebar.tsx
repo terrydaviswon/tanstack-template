@@ -25,8 +25,8 @@ export const Sidebar = ({
   setEditingTitle, 
   handleUpdateChatTitle 
 }: SidebarProps) => (
-  <div className="flex flex-col w-64 bg-gray-800 border-r border-gray-700">
-    <div className="p-4 border-b border-gray-700">
+  <div className="hidden md:flex flex-col w-64 border-r transition-colors" style={{ backgroundColor: 'var(--bg-secondary)', borderColor: 'var(--border-color)' }}>
+    <div className="p-4 border-b" style={{ borderColor: 'var(--border-color)' }}>
       <button
         onClick={handleNewChat}
         className="flex items-center justify-center w-full gap-2 px-3 py-2 text-sm font-medium text-white rounded-lg bg-gradient-to-r from-orange-500 to-red-600 hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-orange-500"
@@ -41,12 +41,13 @@ export const Sidebar = ({
       {conversations.map((chat) => (
         <div
           key={chat.id}
-          className={`group flex items-center gap-3 px-3 py-2 cursor-pointer hover:bg-gray-700/50 ${
-            chat.id === currentConversationId ? 'bg-gray-700/50' : ''
+          className={`group flex items-center gap-3 px-3 py-2 cursor-pointer hover:opacity-80 ${
+            chat.id === currentConversationId ? 'opacity-80' : ''
           }`}
+          style={{ backgroundColor: chat.id === currentConversationId ? 'var(--bg-tertiary)' : 'transparent' }}
           onClick={() => setCurrentConversationId(chat.id)}
         >
-          <MessageCircle className="w-4 h-4 text-gray-400" />
+          <MessageCircle className="w-4 h-4" style={{ color: 'var(--text-tertiary)' }} />
           {editingChatId === chat.id ? (
             <input
               type="text"
@@ -68,11 +69,12 @@ export const Sidebar = ({
                   setEditingTitle('')
                 }
               }}
-              className="flex-1 text-sm text-white bg-transparent focus:outline-none"
+              className="flex-1 text-sm bg-transparent focus:outline-none"
+              style={{ color: 'var(--text-primary)' }}
               autoFocus
             />
           ) : (
-            <span className="flex-1 text-sm text-gray-300 truncate">
+            <span className="flex-1 text-sm truncate" style={{ color: 'var(--text-secondary)' }}>
               {chat.title}
             </span>
           )}
@@ -83,7 +85,8 @@ export const Sidebar = ({
                 setEditingChatId(chat.id)
                 setEditingTitle(chat.title)
               }}
-              className="p-1 text-gray-400 hover:text-white"
+              className="p-1 hover:opacity-80"
+              style={{ color: 'var(--text-tertiary)' }}
             >
               <Edit2 className="w-3 h-3" />
             </button>
@@ -92,7 +95,7 @@ export const Sidebar = ({
                 e.stopPropagation()
                 handleDeleteChat(chat.id)
               }}
-              className="p-1 text-gray-400 hover:text-red-500"
+              className="p-1 text-red-500 hover:opacity-80"
             >
               <Trash2 className="w-3 h-3" />
             </button>

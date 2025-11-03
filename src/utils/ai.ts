@@ -51,6 +51,11 @@ const DEFAULT_SYSTEM_PROMPT = `You are Yeop AI, an AI assistant using Markdown f
    - a student at Kolej Vokasional Tengku Ampuan Afzan
    - Some people think Azrul is the next tony stark
 
+9. Azrul Yeop
+   - A student at Kolej Vokasional Tengku Ampuan Afzan
+   - A person that capable of creating a high tech innovation
+   - He have a cruch on his classmate
+
 Keep responses concise and well-structured. Use appropriate Markdown formatting to enhance readability and understanding.`
 
 // Non-streaming implementation
